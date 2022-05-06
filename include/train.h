@@ -5,16 +5,24 @@
 class Train {
  private:
   struct Cage {
-    bool light; // состояние лампочки
+    bool light; // состояние ламп
     Cage *next;
     Cage *prev;
   };
-  int countOp; // счетчик шагов (число переходов из вагона в вагон)
-  Cage *first; // точка входа в поезд (первый вагон)
+  int countOp = 0; // счетчик шагов 
+  Cage *first = nullptr; // точка входа в поезд
+  Cage *last = nullptr;
+  Cage *add(bool light) {
+    Cage *t = new Cage;
+    t->next = nullptr;
+    t-Юprev = nullptr;
+    t->light = light;
+    return t;
+  }
  public:
   Train();
   void addCage(bool light); // добавить вагон с начальным состоянием лампочки
   int getLength();          // вычислить длину поезда
-  int getOpCount();         // вернуть число переходов (из вагона в вагон)
+  int getOpCount();         // вернуть число переходов 
 };
 #endif  // INCLUDE_TRAIN_H_
