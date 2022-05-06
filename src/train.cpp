@@ -1,45 +1,49 @@
 // Copyright 2021 NNTU-CS
 #include "train.h"
-Train::Train() {}
-int Train::getLength() {
-  int w = 0, i = 0;
-  first->light = true;
-  Cage *t = first;
-  while (true) {
-    ++i;
-    t = t->next;
-    ++countOp;
-    if (t->light) {
-      w = i;
-      t->light = false;
-      int j = i;
-      for (j; j > 0; j--) {
-        t = t->prev;
-        ++countOp;
-        --i;
-      }
-      if (t->light == false) {
-        return w;
-      }
+void Train::addCage(bool light) {
+    if (first != nullptr) {
+        Cage* oneCage = new Cage;
+        oneCage->light = light;
+        tail->next = oneCage;
+        oneCage->prev = tail;
+        oneCage->next = nullptr;
+        tail = tail->next;
+    } else {
+        first = new Cage;
+        first->light = light;
+        first->next = nullptr;
+        first->prev = nullptr;
+        tail = first;
     }
-  }
+}
+int Train::getLength() {
+    Tsize = 1;
+    first->prev = tail;
+    tail->next = first;
+    first->light = true;
+    Cage* train = new Cage;
+    train = first->next;
+    while (true) {
+        countOp++;
+        if (train->light != true) {
+            Tsize++;
+            train = train->next;
+        } else {
+            train->light = false;
+            break;
+        }
+    }
+    for (int i = 1; i <= Tsize; i++) {
+        countOp++;
+        train = train->prev;
+    }
+    if (train->light == false) {
+        return Tsize;
+
+    } else {
+        return getLength();
+    }
 }
 int Train::getOpCount() {
-  return countOp;
-}
-void Train::addCage(bool light) {
-  if (first && last) {
-    last->next = add(light);
-    last->next->prev = last;
-    last = last->next;
-    if (!last->next) {
-      last->next = first;
-    }
-    if (!first->prev) {
-      first->prev = last;
-    }
-  } else {
-    first = add(light);
-    last = first;
-  }
+    return countOp;
 }
