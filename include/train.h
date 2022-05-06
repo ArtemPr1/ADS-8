@@ -1,24 +1,23 @@
 // Copyright 2022 NNTU-CS
 #ifndef INCLUDE_TRAIN_H_
 #define INCLUDE_TRAIN_H_
-
 class Train {
  private:
   struct Cage {
-    bool light; // состояние ламп
+    bool light; // состояние лампочки
     Cage *next;
     Cage *prev;
   };
-  int countOp = 0; // счетчик шагов 
-  Cage *first = nullptr; // точка входа в поезд
-  Cage *last = nullptr;
+  int countOp; // счетчик шагов 
+  Cage *first; // точка входа в поезд 
+  Cage *last;
   Cage *add(bool light) {
     Cage *t = new Cage;
     t->next = nullptr;
     t->prev = nullptr;
     t->light = light;
     return t;
-  }
+} 
  public:
   Train();
   void addCage(bool light); // добавить вагон с начальным состоянием лампочки
