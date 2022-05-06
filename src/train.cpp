@@ -1,8 +1,16 @@
 // Copyright 2021 NNTU-CS
 #include "train.h"
-
+Train::Train(): countOp(0), first(nullptr) {}
 void Train::addCage(bool light) {
-    if (first == nullptr) {
+    if (first != nullptr) {
+        Cage* step;
+        step = new Cage;
+        step->light = light;
+        step->next = nullptr;
+        step->prev = last;
+        last->next = step;
+        last = step;
+    } else {
         first = new Cage;
         first->light = light;
         first->next = nullptr;
@@ -10,54 +18,37 @@ void Train::addCage(bool light) {
         last = first;
         return;
     }
-          Cage* start;
-          start = new Cage;
-          start->light = light;
-          start->next = nullptr;
-          start->prev = last;
-          last->next = start;
-          last = start;
 }
+int Train::getLength() {
 
-    int Train::getLength() {
-        getCount();
-        return count;
-    }
-
-    void Train::getCount() {
-        if (flag) return;
-        flag = true;
         first->light = true;
         first->prev = last;
         last->next = first;
         Cage* temp = first;
-        Cage* current = first->next;
-        while (current != nullptr) {
-            if (current->light == false) {
-                countOp++;
+        Cage* van = first->next;
+        while (van != nullptr) {
+            if (!van->light) {
                 count++;
-                current = current->next;
+                countOp++;
+                van = van->next;
             } else {
-                if (current->light == true) {
-                    current->light = false;
+                if (van->light) {
+                        van->light = 0;
                     countOp++;
                 }
-                int i = count;
-                while (i != 0) {
-                    current = current->prev;
+                for (int i = count; i > 0; i--) {
+                    van = van->prev;
                     countOp++;
-                    i--;
                 }
-                if (current->light == false) {
+                if (!van->light) {
                     break;
                 }
-                current = current->next;
+                van = van->next;
                 count = 1;
             }
         }
+        return count;
     }
-
-    int Train::getOpCount() {
-        getLength();
-        return countOp;
-    }
+int Train::getOpCount() {
+  return countOp;
+}
