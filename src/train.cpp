@@ -6,11 +6,13 @@ Train::Cage *Train::create(bool light) {
   item->next = item->prev = nullptr;
   return item;
 }
+
 Train::Train() {
   first = current = nullptr;
-  countOp = length = Count = 0;
+  countOp = length = Count= 0;
   countOp = length = Count = 0;
 }
+
 void Train::addCage(bool light) {
   if (!(first)) {
     first = create(light);
