@@ -5,22 +5,25 @@ class Train {
  private:
   struct Cage {
     bool light; // состояние лампочки
-    bool light;
     Cage *next;
     Cage *prev;
   };
-  int countOp, length, Count; // счетчик шагов 
-  Cage *first, *current; // точка входа в поезд 
-  int countOp, length, Count;
-  Cage *first, *current;
-  Train::Cage *create(bool light);
+  int countOp,k=1; // счетчик шагов (число переходов из вагона в вагон)
+  Cage *first,*last; // точка входа в поезд (первый вагон)
+  int countOp, k = 1; // счетчик шагов (число переходов из вагона в вагон)
+  Cage *first, *last; // точка входа в поезд (первый вагон)
+  Train::Cage* create(bool light) {
+        Cage* cage = new Cage;
+        cage->light = light;
+        cage->next = nullptr;
+        cage->prev = nullptr;
+        return cage;
+    }
  public:
-  Train();
+  Train():countOp(0), first(nullptr),last(nullptr) {};
+  Train():countOp(0), first(nullptr), last(nullptr) {}
   void addCage(bool light); // добавить вагон с начальным состоянием лампочки
   int getLength();          // вычислить длину поезда
-  int getOpCount();         // вернуть число переходов 
-  void addCage(bool light);
-  int getLength();
-  int getOpCount();
+  int getOpCount();         // вернуть число переходов (из вагона в вагон)
 };
 #endif  // INCLUDE_TRAIN_H_
