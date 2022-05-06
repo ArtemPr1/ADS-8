@@ -15,7 +15,7 @@ class Train {
   Cage *add(bool light) {
     Cage *t = new Cage;
     t->next = nullptr;
-    t-Юprev = nullptr;
+    t->prev = nullptr;
     t->light = light;
     return t;
   }
