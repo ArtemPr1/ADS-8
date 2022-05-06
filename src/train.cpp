@@ -1,54 +1,63 @@
 // Copyright 2021 NNTU-CS
 #include "train.h"
+
 void Train::addCage(bool light) {
-    if (first != nullptr) {
-        Cage* oneCage = new Cage;
-        oneCage->light = light;
-        tail->next = oneCage;
-        oneCage->prev = tail;
-        oneCage->next = nullptr;
-        tail = tail->next;
-    }
-    else {
-    } else {
+    if (first == nullptr) {
         first = new Cage;
         first->light = light;
         first->next = nullptr;
         first->prev = nullptr;
-        tail = first;
+        last = first;
+        return;
     }
+          Cage* start;
+          start = new Cage;
+          start->light = light;
+          start->next = nullptr;
+          start->prev = last;
+          last->next = start;
+          last = start;
 }
-int Train::getLength() {
-    Tsize = 1;
-    first->prev = tail;
-    tail->next = first;
-    first->light = true;
-    Cage* train = new Cage;
-    train = first->next;
-    while (true) {
-        countOp++;
-        if (train->light != true) {
-            Tsize++;
-            train = train->next;
+
+    int Train::getLength() {
+        getCount();
+        return count;
+    }
+
+    void Train::getCount() {
+        if (flag) return;
+        flag = true;
+        first->light = true;
+        first->prev = last;
+        last->next = first;
+        Cage* temp = first;
+        Cage* current = first->next;
+        while (current != nullptr) {
+            if (current->light == false) {
+                countOp++;
+                count++;
+                current = current->next;
+            } else {
+                if (current->light == true) {
+                    current->light = false;
+                    countOp++;
+                }
+                int i = count;
+                while (i != 0) {
+                    current = current->prev;
+                    countOp++;
+                    i--;
+                }
+                if (current->light == false) {
+                    break;
+                }
+                current = current->next;
+                count = 1;
+            }
         }
-        else {
-        } else {
-            train->light = false;
-            break;
-        }
     }
-    for (int i = 1; i <= Tsize; i++) {
-        countOp++;
-        train = train->prev;
+
+    int Train::getOpCount() {
+        getLength();
+        return countOp;
     }
-    if (train->light == false) {
-        return Tsize;
-    }  
-    else {
-    } else {
-        return getLength();
-    }
-}
-int Train::getOpCount() {
-    return countOp;
-}
