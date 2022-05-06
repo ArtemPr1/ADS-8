@@ -1,54 +1,51 @@
 // Copyright 2021 NNTU-CS
 #include "train.h"
-Train::Cage *Train::create(bool light) {
-  Cage* item = new Cage;
-  item->light = light;
-  item->next = item->prev = nullptr;
-  return item;
-}
-Train::Train() {
-  first = current = nullptr;
-  countOp = length = Count = 0;
-}
+Train::Train(): countOp(0), first(nullptr) {}
 void Train::addCage(bool light) {
-  if (!(first)) {
-    first = create(light);
-    current = first;
+  Cage *cage = new Cage;
+  cage->light = light;
+  cage->prev = nullptr;
+  cage->next = nullptr;
+  if (first == nullptr) {
+    first = cage;
+  } else if (first->next == nullptr) {
+    first->next = cage;
+    cage->prev = first;
+    first->prev = cage;
+    cage->next = first;
   } else {
-    current->next = create(light);
-    current->next->prev = current;
-    current = current->next;
-    if (!current->next) {
-      current->next = first;
-    } else {
-      first->prev = current;
-    }
+    first->prev->next = cage;
+    cage->prev = first->prev;
+    first->prev = cage;
+    cage->next = first;
   }
 }
+
 int Train::getLength() {
+  int len = 0;
+  int tr_len;
+  countOp = 0;
   first->light = true;
-  current = first;
-  int temp;
+  Cage* temp = first;
   while (true) {
-    ++countOp, ++Count;
-    current = current->next;
-    if (current->light) {
-      temp = Count;
-      current->light = false;
-      if ((current->prev) != nullptr) {
-        while (current->light == false) {
-          current = current->prev;
-          --Count, ++countOp;
-        }
+    countOp++;
+    len++;
+    int tr_len;
+    temp = temp->next;
+    if (temp->light) {
+      temp->light = false;
+      tr_len = len;
+      for (tr_len; tr_len > 0; tr_len--) {
+        temp = temp->prev;
+        countOp++;
       }
-      if (!current->light) {
-        length = temp;
-        break;
+      if (!temp->light) {
+        return len;
       }
+      len = tr_len;
     }
   }
-  countOp += length;
-  return length;
+  return tr_len;
 }
 int Train::getOpCount() {
   return countOp;
